@@ -14,7 +14,7 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String categoryid;
-    private String ingredienid;
+    private String ingredien;
     private String description;
     private String name;
     private String step;
@@ -38,11 +38,11 @@ public class Recipe {
     }
 
     public String getIngredienid() {
-        return ingredienid;
+        return ingredien;
     }
 
     public void setIngredienid(String ingredienid) {
-        this.ingredienid = ingredienid;
+        this.ingredien = ingredien;
     }
 
     public String getDescription() {
