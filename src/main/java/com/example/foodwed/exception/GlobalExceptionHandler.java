@@ -1,6 +1,6 @@
 package com.example.foodwed.exception;
 
-import com.example.foodwed.dto.Request.ApiRespone;
+import com.example.foodwed.dto.response.ApiRespone;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,10 +23,11 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiRespone> handlingAppException(Appexception exception){
         ErrorCode errorCode = exception.getErrorCode();
         ApiRespone apiResponse = new ApiRespone<>();
-
+        apiResponse.setStatus(errorCode.getStatus());
         apiResponse.setCode(String.valueOf(errorCode.getCode()));
         apiResponse.setMessage(errorCode.getMessage());
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
+
 }
