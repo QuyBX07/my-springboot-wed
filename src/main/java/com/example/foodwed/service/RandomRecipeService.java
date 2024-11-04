@@ -28,7 +28,7 @@ public class RandomRecipeService {
 
         // Lấy ngẫu nhiên 2 bản ghi
         Collections.shuffle(recipes);
-        List<Recipe> randomRecipes = recipes.stream().limit(2).collect(Collectors.toList());
+        List<Recipe> randomRecipes = recipes.stream().limit(8).collect(Collectors.toList());
 
         return randomRecipes.stream()
                 .map(recipe -> new SuggestionResponse(recipe.getId(), recipe.getName(), recipe.getImage()))
