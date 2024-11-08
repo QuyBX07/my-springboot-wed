@@ -15,8 +15,8 @@ public class Comment {
     private String userid;
     private String recipeid;
     private String content;
-    private String parent_cmtid;
-    private LocalDate date;
+    private String parentCmtid; // sửa tên thành camelCase
+    private LocalDate date = LocalDate.now(); // mặc định là ngày hiện tại
 
     public String getCmtid() {
         return cmtid;
@@ -50,12 +50,12 @@ public class Comment {
         this.content = content;
     }
 
-    public String getParent_cmtid() {
-        return parent_cmtid;
+    public String getParentCmtid() {
+        return parentCmtid;
     }
 
-    public void setParent_cmtid(String parent_cmtid) {
-        this.parent_cmtid = parent_cmtid;
+    public void setParentCmtid(String parentCmtid) {
+        this.parentCmtid = parentCmtid;
     }
 
     public LocalDate getDate() {
