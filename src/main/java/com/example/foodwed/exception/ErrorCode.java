@@ -6,7 +6,10 @@ public enum ErrorCode {
     USER_EMAIL_Error("fail",1003,"email not correct"),
     PASSWORD_NOT_CORECT("fail",1004,"password not correct"),
     SUGGESTION_ERROR("fail",1005,"not found suggestion"),
-    PARAM_ERROR("fail", 1006,"missing parameter")
+    PARAM_ERROR("fail", 1006,"parameter empty"),
+    CATEGORY_EXITED("fail",1007,"category exited"),
+    CATEGORY_NOT_EXITED("fail",1008,"category not exited"),
+    RECIPE_NOT_FOUND("fail",1009,"recipe not found")
     ;
     ErrorCode(String status,int code, String message) {
         this.code = code;

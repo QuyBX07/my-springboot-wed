@@ -18,14 +18,14 @@ import java.util.List;
 public class SuggestionController {
     @Autowired
     private RandomRecipeService randomRecipeService;
-    @GetMapping("/{id}&{categoryid}")
-    public ResponseEntity<?> getSuggestion(@PathVariable String id, @PathVariable String categoryid){
-        if (id.isEmpty() || categoryid.isEmpty()){
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getSuggestion(@PathVariable String id){
+        if (id.isEmpty()){
             throw new Appexception(ErrorCode.PARAM_ERROR);
         }
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiRespone<List<SuggestionResponse>>("success","200","ok",
-                        randomRecipeService.getSuggestion(id,categoryid)
+                        randomRecipeService.getSuggestion(id)
                         ));
     }
 

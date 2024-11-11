@@ -20,8 +20,8 @@ public class RandomRecipeService {
     @Autowired
     private RecipeReponsitory recipeReponsitory;
 
-    public List<SuggestionResponse> getSuggestion(String id, String categoryId) {
-        List<Recipe> recipes = recipeReponsitory.findRandomByIdNotAndCategoryId(id, categoryId);
+    public List<SuggestionResponse> getSuggestion(String id) {
+        List<Recipe> recipes = recipeReponsitory.findRandomByIdNotAndCategoryId(id);
         if (recipes.isEmpty()){
             throw new Appexception(ErrorCode.SUGGESTION_ERROR);
         }

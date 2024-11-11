@@ -1,25 +1,27 @@
 package com.example.foodwed.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 
-import java.time.LocalDateTime;
+@NoArgsConstructor
+@AllArgsConstructor
 
 @Entity
 public class Recipe {
     @Id
+
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String categoryid;
+
     private String ingredien;
     private String description;
     private String name;
     private String step;
     private String image;
-    private LocalDateTime time;
+    private int time;
+    private int serves;
 
     public String getId() {
         return id;
@@ -29,21 +31,9 @@ public class Recipe {
         this.id = id;
     }
 
-    public String getCategoryid() {
-        return categoryid;
-    }
 
-    public void setCategoryid(String categoryid) {
-        this.categoryid = categoryid;
-    }
 
-    public String getIngredienid() {
-        return ingredien;
-    }
 
-    public void setIngredienid(String ingredienid) {
-        this.ingredien = ingredien;
-    }
 
     public String getDescription() {
         return description;
@@ -77,11 +67,27 @@ public class Recipe {
         this.image = image;
     }
 
-    public LocalDateTime getTime() {
+    public String getIngredien() {
+        return ingredien;
+    }
+
+    public void setIngredien(String ingredien) {
+        this.ingredien = ingredien;
+    }
+
+    public int getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(int time) {
         this.time = time;
+    }
+
+    public int getServes() {
+        return serves;
+    }
+
+    public void setServes(int serves) {
+        this.serves = serves;
     }
 }
