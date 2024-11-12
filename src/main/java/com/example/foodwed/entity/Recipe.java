@@ -13,13 +13,12 @@ public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String categoryid;
     private String ingredien;
-    private String description;
+    private String serves;
     private String name;
     private String step;
     private String image;
-    private LocalDateTime time;
+    private int time;
 
     public String getId() {
         return id;
@@ -29,29 +28,22 @@ public class Recipe {
         this.id = id;
     }
 
-    public String getCategoryid() {
-        return categoryid;
+    public String getServes() {
+        return serves;
     }
 
-    public void setCategoryid(String categoryid) {
-        this.categoryid = categoryid;
+    public void setServes(String serves) {
+        this.serves = serves;
     }
 
-    public String getIngredienid() {
+    public String getIngredien() {
         return ingredien;
     }
 
-    public void setIngredienid(String ingredienid) {
+    public void setIngredien(String ingredien) {
         this.ingredien = ingredien;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public String getName() {
         return name;
@@ -77,11 +69,12 @@ public class Recipe {
         this.image = image;
     }
 
-    public LocalDateTime getTime() {
+    public int getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(int time) {
         this.time = time;
     }
+
 }
