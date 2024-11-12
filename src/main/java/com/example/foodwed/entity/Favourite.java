@@ -1,41 +1,48 @@
 package com.example.foodwed.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-import java.time.LocalDate;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Favourite {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String fvid;
-    private String userid;
-    private String recipeid;
 
-    public String getFvid() {
-        return fvid;
+    @EmbeddedId
+    private FavouriteId id;
+
+    @ManyToOne
+    @MapsId("userid") // Ánh xạ tới khóa ngoại "userid" trong FavouriteId
+    @JoinColumn(name = "userid")
+    private User user;
+
+    @ManyToOne
+    @MapsId("recipeid") // Ánh xạ tới khóa ngoại "recipeid" trong FavouriteId
+    @JoinColumn(name = "recipeid")
+    private Recipe recipe;
+
+    public FavouriteId getId(){
+        return id;
     }
 
-    public void setFvid(String fvid) {
-        this.fvid = fvid;
+    public void setId(FavouriteId id) {
+        this.id = id;
     }
 
-    public String getUserid() {
-        return userid;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getRecipeid() {
-        return recipeid;
+    public Recipe getRecipe() {
+        return recipe;
     }
 
-    public void setRecipeid(String recipeid) {
-        this.recipeid = recipeid;
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

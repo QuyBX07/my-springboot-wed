@@ -4,10 +4,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -16,7 +21,7 @@ public class Comment {
     private String recipeid;
     private String content;
     private String parent_cmtid;
-    private LocalDate date;
+    private LocalDateTime date;
 
     public String getCmtid() {
         return cmtid;
@@ -58,11 +63,11 @@ public class Comment {
         this.parent_cmtid = parent_cmtid;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 }

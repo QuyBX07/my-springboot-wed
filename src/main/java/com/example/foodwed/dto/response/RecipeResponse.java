@@ -1,11 +1,11 @@
 package com.example.foodwed.dto.response;
 
-public class SuggestionResponse {
+public class RecipeResponse {
     private String id;
     private String name;
     private String image;
 
-    public SuggestionResponse(String id, String name, String image) {
+    public RecipeResponse(String id, String name, String image) {
         this.id = id;
         this.name = name;
         this.image = image;

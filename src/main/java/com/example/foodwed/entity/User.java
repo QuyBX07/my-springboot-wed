@@ -1,5 +1,8 @@
 package com.example.foodwed.entity;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +19,11 @@ import java.util.Set;
 @Slf4j
 @NoArgsConstructor
 @AllArgsConstructor
+import java.util.Set;
+
+@NoArgsConstructor
+@AllArgsConstructor
+
 @Entity
 @Builder
 public class User {
