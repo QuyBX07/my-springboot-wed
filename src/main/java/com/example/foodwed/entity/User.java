@@ -15,15 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.util.Set;
+
+import java.util.Set;
+
+
 @Data
 @Slf4j
 @NoArgsConstructor
 @AllArgsConstructor
-import java.util.Set;
-
-@NoArgsConstructor
-@AllArgsConstructor
-
 @Entity
 @Builder
 public class User {

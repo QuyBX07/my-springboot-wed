@@ -25,7 +25,9 @@ import javax.crypto.spec.SecretKeySpec;
 public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINS = {"/auth/signup", "/auth/token", "/auth/introspect"};
     private final String[] ADMIN_AUTHEN_GET = {};
-    private final String[] ADMIN_AUTHEN_POST = {};
+    private final String[] ADMIN_AUTHEN_POST = {"/recipe/create","/category/create"};
+    private final String[] ADMIN_AUTHEN_PUT = {"/recipe/update","/category/update"};
+    private final String[] ADMIN_AUTHEN_DELETE = {"/recipe/delete","/category/delete"};
     private String signerKey = "3OBF8MHgoEMo+8acrb2h2dBsegTQtbK0S8uKwMcdnTpBDbl7PKHvHS54R2uFn/aH";
 
     @Bean
@@ -35,6 +37,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, ADMIN_AUTHEN_GET)
                         .hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, ADMIN_AUTHEN_POST)
+                        .hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT,ADMIN_AUTHEN_PUT)
+                        .hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE,ADMIN_AUTHEN_DELETE)
                         .hasAnyAuthority(Role.ADMIN.name())
                         .anyRequest().authenticated());
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
