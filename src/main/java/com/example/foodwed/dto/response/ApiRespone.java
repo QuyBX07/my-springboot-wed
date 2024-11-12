@@ -1,4 +1,6 @@
-package com.example.foodwed.dto.Request;
+package com.example.foodwed.dto.response;
+
+
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;

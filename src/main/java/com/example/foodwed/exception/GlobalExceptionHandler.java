@@ -1,6 +1,6 @@
 package com.example.foodwed.exception;
 
-import com.example.foodwed.dto.Request.ApiRespone;
+import com.example.foodwed.dto.response.ApiRespone;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -30,4 +30,5 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
+
 }
