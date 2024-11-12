@@ -14,6 +14,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.valueOf(emunKey);
 
         ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setStatus(errorCode.getStatus());
         apiRespone.setCode(String.valueOf(errorCode.getCode()));
         apiRespone.setMessage(errorCode.getMessage());
         return ResponseEntity.badRequest().body(apiRespone);

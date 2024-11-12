@@ -2,19 +2,24 @@ package com.example.foodwed.service;
 
 import com.example.foodwed.dto.Request.UserCreateRequest;
 import com.example.foodwed.dto.Request.UserLogin;
+import com.example.foodwed.dto.response.UserResponse;
 import com.example.foodwed.entity.User;
+import com.example.foodwed.enums.Role;
 import com.example.foodwed.exception.Appexception;
 import com.example.foodwed.exception.ErrorCode;
 import com.example.foodwed.repository.UserReponsitory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserService {
     @Autowired
     private UserReponsitory userRepository;
@@ -26,29 +31,22 @@ public class UserService {
             throw new Appexception(ErrorCode.USSER_EXITED);
         }
         user.setFullname(request.getFullname());
-//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-//        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        HashSet<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+        user.setRole(roles);
         user.setEmail(request.getEmail());
 
         return userRepository.save(user);
     }
 
-    public List<User> getUser(){
-        return userRepository.findAll();
+    public List<UserResponse> getUsers() {
+        log.info("In method get Users");
+        return userRepository.findAll().stream()
+                .map(user -> new UserResponse(user.getUserid(), user.getEmail(), user.getFullname(), user.getPassword(), user.getRole())) // Chuyển đổi trực tiếp từ User sang UserResponse
+                .toList();
     }
 
-//    public User loginUser(UserLogin request) throws AuthenticationException {
-//        // Tìm người dùng bằng email
-//        User user = userRepository.findByEmail(request.getEmail())
-//                .orElseThrow(() -> new Appexception(ErrorCode.USER_EMAIL_Error));
-//
-//        // Kiểm tra mật khẩu
-//        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-//            throw new Appexception(ErrorCode.PASSWORD_NOT_CORECT);
-//        }
-//
-//        // Nếu xác thực thành công, trả về người dùng (hoặc token nếu bạn muốn)
-//        return user; // hoặc bạn có thể trả về một token
-//    }
 
 }

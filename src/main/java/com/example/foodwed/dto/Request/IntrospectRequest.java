@@ -1,14 +1,14 @@
-package com.example.foodwed.dto.response;
+package com.example.foodwed.dto.Request;
+
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthResponse {
+public class IntrospectRequest {
     String token;
-    boolean authenticated;
 }
