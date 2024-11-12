@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Set;
+
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -17,6 +19,7 @@ public class User {
     private String fullname;
     private String password;
     private String email;
+    private Set<String> role;
 
     public String getUserid() {
         return userid;

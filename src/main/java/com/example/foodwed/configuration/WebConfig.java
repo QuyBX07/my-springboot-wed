@@ -1,4 +1,4 @@
-package com.example.foodwed.config;
+package com.example.foodwed.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
