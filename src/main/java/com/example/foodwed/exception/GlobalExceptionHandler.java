@@ -14,6 +14,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.valueOf(emunKey);
 
         ApiRespone apiRespone = new ApiRespone<>();
+        apiRespone.setStatus(errorCode.getStatus());
         apiRespone.setCode(String.valueOf(errorCode.getCode()));
         apiRespone.setMessage(errorCode.getMessage());
         return ResponseEntity.badRequest().body(apiRespone);
@@ -23,7 +24,7 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiRespone> handlingAppException(Appexception exception){
         ErrorCode errorCode = exception.getErrorCode();
         ApiRespone apiResponse = new ApiRespone<>();
-
+        apiResponse.setStatus(errorCode.getStatus());
         apiResponse.setCode(String.valueOf(errorCode.getCode()));
         apiResponse.setMessage(errorCode.getMessage());
 
