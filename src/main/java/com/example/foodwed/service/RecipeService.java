@@ -12,12 +12,11 @@ import com.example.foodwed.exception.ErrorCode;
 import com.example.foodwed.repository.CategoryReponsitory;
 import com.example.foodwed.repository.RecipeCategoryRepository;
 import com.example.foodwed.repository.RecipeReponsitory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class RecipeService {
@@ -27,6 +26,11 @@ public class RecipeService {
     private CategoryReponsitory categoryReponsitory;
     @Autowired
     private RecipeCategoryRepository recipeCategoryRepository;
+
+    public List<Recipe> getAllRecipe() {
+        return recipeReponsitory.findAll();
+    }
+
     public RecipeEditResponse create(RecipeCreateRequest recipeRequest) {
         // 1. Kiểm tra tất cả categoryId có tồn tại trong database không
         for (String categoryId : recipeRequest.getCategoryids()) {

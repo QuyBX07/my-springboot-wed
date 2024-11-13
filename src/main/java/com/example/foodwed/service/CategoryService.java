@@ -18,7 +18,7 @@ public class CategoryService {
 
     public Category create(String name){
         Category category = new Category();
-        if(!categoryReponsitory.existsByName(name)){
+        if(categoryReponsitory.existsByName(name)){
             throw new Appexception(ErrorCode.CATEGORY_EXITED);
         }
         category.setName(name);
