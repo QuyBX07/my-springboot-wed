@@ -28,7 +28,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect"};
-    private final String[] PUBLIC_ENDPOINS_GET = {"/category","/suggestion/**","foodwed/images/**"};
+    private final String[] PUBLIC_ENDPOINS_GET = {"/category","/suggestion/**","foodwed/images/**", "/comments/**"};
     private final String[] ADMIN_AUTHEN_GET = {"foodwed/recipe","/foodwed/order"};
     private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create","/foodwed/order/create"};
     private final String[] ADMIN_AUTHEN_PUT = {"/foodwed/recipe/update","/foodwed/category/update","foodwed/order/update/**"};
@@ -41,6 +41,9 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request ->
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINS_POST).permitAll()
                         .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINS_GET).permitAll()
+
+                        // POST /foodwed/comments requires authentication (logged-in users only)
+                        .requestMatchers(HttpMethod.POST, "/foodwed/comments").authenticated()
 
                         .requestMatchers(HttpMethod.GET, ADMIN_AUTHEN_GET)
                         .hasAnyAuthority(Role.ADMIN.name())
@@ -94,4 +97,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);  // Áp dụng cho tất cả các endpoint
         return source;
     }
+
 }
