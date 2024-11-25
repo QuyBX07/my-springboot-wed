@@ -17,7 +17,7 @@ public class SearchService {
             return recipeRepository.findByName(name);
         }
         // Return null or handle as you prefer
-        throw new IllegalArgumentException("Invalid search name");  // or throw an exception, e.g., new IllegalArgumentException("Invalid search name");
+        throw new IllegalArgumentException("Invalid search name");  //
     }
 
 }
