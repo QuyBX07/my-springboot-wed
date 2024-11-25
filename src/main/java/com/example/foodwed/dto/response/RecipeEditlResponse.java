@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
-public class RecipeEditResponse {
+public class RecipeEditlResponse {
     private Recipe recipe;
     private List<String> categoryid;
 }

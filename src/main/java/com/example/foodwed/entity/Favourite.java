@@ -21,7 +21,6 @@ public class Favourite {
     @MapsId("recipeid") // Ánh xạ tới khóa ngoại "recipeid" trong FavouriteId
     @JoinColumn(name = "recipeid")
     private Recipe recipe;
-
     public FavouriteId getId(){
         return id;
     }

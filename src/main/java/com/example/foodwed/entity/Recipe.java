@@ -1,15 +1,15 @@
 package com.example.foodwed.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
+@Getter
+@Setter
 public class Recipe {
     @Id
 
