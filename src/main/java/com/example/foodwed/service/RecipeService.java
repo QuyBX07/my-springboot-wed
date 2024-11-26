@@ -13,6 +13,9 @@ import com.example.foodwed.repository.CategoryReponsitory;
 import com.example.foodwed.repository.RecipeCategoryRepository;
 import com.example.foodwed.repository.RecipeReponsitory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +30,9 @@ public class RecipeService {
     @Autowired
     private RecipeCategoryRepository recipeCategoryRepository;
 
-    public List<Recipe> getAllRecipe() {
-        return recipeReponsitory.findAll();
+    public Page<Recipe> getAllRecipe(int page) {
+        Pageable pageable = PageRequest.of(page, 9);
+        return recipeReponsitory.findAllRecipes(pageable);
     }
 
     public RecipeEditResponse create(RecipeCreateRequest recipeRequest) {

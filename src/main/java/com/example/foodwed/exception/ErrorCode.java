@@ -18,9 +18,9 @@ public enum ErrorCode {
         this.status = status;
     }
 
-    private int code;
-    private String message;
-private String status;
+    private final int code;
+    private final String message;
+private final String status;
 
     public String getStatus() {
         return status;

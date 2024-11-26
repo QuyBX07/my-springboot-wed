@@ -16,7 +16,7 @@ public class SearchService {
         if (name != null && !name.trim().isEmpty()) {
             return recipeRepository.findByName(name);
         }
-        // Return null or handle as you prefer
+
         throw new IllegalArgumentException("Invalid search name");  //
     }
 

@@ -26,7 +26,7 @@ public class SecurityConfig {
     private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create"};
     private final String[] ADMIN_AUTHEN_PUT = {"/foodwed/recipe/update","/foodwed/category/update"};
     private final String[] ADMIN_AUTHEN_DELETE = {"/foodwed/recipe/delete","/foodwed/category/delete"};
-    private String signerKey = "3OBF8MHgoEMo+8acrb2h2dBsegTQtbK0S8uKwMcdnTpBDbl7PKHvHS54R2uFn/aH";
+    private final String signerKey = "3OBF8MHgoEMo+8acrb2h2dBsegTQtbK0S8uKwMcdnTpBDbl7PKHvHS54R2uFn/aH";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
