@@ -15,43 +15,45 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
     private final String[] PUBLIC_ENDPOINS = {"/auth/signup", "/auth/token", "/auth/introspect"};
-    private final String[] ADMIN_AUTHEN_GET = {};
-    private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create"};
-    private final String[] ADMIN_AUTHEN_PUT = {"/foodwed/recipe/update","/foodwed/category/update"};
-    private final String[] ADMIN_AUTHEN_DELETE = {"/foodwed/recipe/delete","/foodwed/category/delete"};
-    private String signerKey = "3OBF8MHgoEMo+8acrb2h2dBsegTQtbK0S8uKwMcdnTpBDbl7PKHvHS54R2uFn/aH";
+    private String signerKey = "P+AXEr5YSjgWWwldDADpzU7qRTS+IyM00+fAPzA2MRBtInwe+WyVuxPCo/DpEqKd";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        // Cấu hình CORS
+        httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+
+        // Cấu hình bảo mật cho các endpoint
         httpSecurity.authorizeHttpRequests(request ->
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINS).permitAll()
-                        .requestMatchers(HttpMethod.GET, ADMIN_AUTHEN_GET)
-                        .hasAnyAuthority(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.POST, ADMIN_AUTHEN_POST)
-                        .hasAnyAuthority(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.PUT,ADMIN_AUTHEN_PUT)
-                        .hasAnyAuthority(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.DELETE,ADMIN_AUTHEN_DELETE)
+                        .requestMatchers(HttpMethod.GET, "/user")
                         .hasAnyAuthority(Role.ADMIN.name())
                         .anyRequest().authenticated());
+
+        // Cấu hình cho OAuth2 Resource Server
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
                 .jwtAuthenticationConverter(jwtAuthenticationConverter())));
 
+        // Tắt CSRF
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
+
         return httpSecurity.build();
     }
 
     @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter(){
+    JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
 
@@ -61,8 +63,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtDecoder jwtDecoder(){
-        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(),"HS512");
+    JwtDecoder jwtDecoder() {
+        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
         return NimbusJwtDecoder
                 .withSecretKey(secretKeySpec)
                 .macAlgorithm(MacAlgorithm.HS512)
@@ -70,8 +72,20 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
 
+    // Phương thức cấu hình CORS
+    @Bean
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));  // Cấu hình domain của frontend
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);  // Cho phép gửi cookie và thông tin xác thực
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);  // Áp dụng cho tất cả các endpoint
+        return source;
+    }
 }

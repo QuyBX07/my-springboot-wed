@@ -2,6 +2,7 @@ package com.example.foodwed.service;
 
 import com.example.foodwed.dto.Request.UserCreateRequest;
 import com.example.foodwed.dto.Request.UserLogin;
+import com.example.foodwed.dto.Request.UserUpdateRequest;
 import com.example.foodwed.dto.response.UserResponse;
 import com.example.foodwed.entity.User;
 import com.example.foodwed.enums.Role;
@@ -24,6 +25,8 @@ public class UserService {
     @Autowired
     private UserReponsitory userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
     public User createUser(UserCreateRequest request){
         User user = new User();
@@ -31,7 +34,6 @@ public class UserService {
             throw new Appexception(ErrorCode.USSER_EXITED);
         }
         user.setFullname(request.getFullname());
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());
@@ -46,6 +48,22 @@ public class UserService {
         return userRepository.findAll().stream()
                 .map(user -> new UserResponse(user.getUserid(), user.getEmail(), user.getFullname(), user.getPassword(), user.getRole())) // Chuyển đổi trực tiếp từ User sang UserResponse
                 .toList();
+    }
+
+    // doi mat khau
+    public User changePassword(String userId, UserUpdateRequest request) {
+        // Tìm người dùng
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new Appexception(ErrorCode.USERNOTFOUND));
+
+        // Kiểm tra mật khẩu cũ
+        if (!passwordEncoder.matches(request.getOldpassword(), user.getPassword())) {
+            throw new Appexception(ErrorCode.INVALIDPASSWORD);
+        }
+
+        // Cập nhật mật khẩu mới
+        user.setPassword(passwordEncoder.encode(request.getNewpassword()));
+        return userRepository.save(user);
     }
 
 

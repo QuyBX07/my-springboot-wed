@@ -1,7 +1,7 @@
 package com.example.foodwed.exception;
 
 public enum ErrorCode {
-    USSER_EXITED("fail",1001, "User Existed"),
+    USSER_EXITED("fail",1001, "Email đã tồn tại"),
     USSER_Email("fail",1002,"Email needs to be in the correct format"),
     USER_EMAIL_Error("fail",1003,"email not correct"),
     PASSWORD_NOT_CORECT("fail",1004,"password not correct"),
@@ -10,7 +10,10 @@ public enum ErrorCode {
     UNAAUTHENTICATED("fail",1010, "kiem tra lai mat khau va email"),
     CATEGORY_EXITED("fail",1007,"category exited"),
     CATEGORY_NOT_EXITED("fail",1008,"category not exited"),
-    RECIPE_NOT_FOUND("fail",1009,"recipe not found")
+    RECIPE_NOT_FOUND("fail",1009,"recipe not found"),
+    USERNOTFOUND("fail",1010,"Người dùng không tồn tại"),
+    INVALIDPASSWORD("fail",1011,"Mật khẩu cũ không đúng")
+
     ;
     ErrorCode(String status,int code, String message) {
         this.code = code;

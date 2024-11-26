@@ -38,7 +38,7 @@ public class AuthService {
 
     // chu ki ca nhan
     @NonFinal
-    protected static final String SIGNER_KEY = "3OBF8MHgoEMo+8acrb2h2dBsegTQtbK0S8uKwMcdnTpBDbl7PKHvHS54R2uFn/aH";
+    protected static final String SIGNER_KEY = "P+AXEr5YSjgWWwldDADpzU7qRTS+IyM00+fAPzA2MRBtInwe+WyVuxPCo/DpEqKd";
 
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();
