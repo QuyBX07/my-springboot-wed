@@ -2,7 +2,9 @@ package com.example.foodwed.service;
 
 import com.example.foodwed.dto.Request.RecipeCreateRequest;
 import com.example.foodwed.dto.Request.RecipeUpdateRequest;
-import com.example.foodwed.dto.response.RecipeEditResponse;
+import com.example.foodwed.dto.response.PaginatedResponse;
+import com.example.foodwed.dto.response.RecipeDetailResponse;
+import com.example.foodwed.dto.response.RecipeEditlResponse;
 import com.example.foodwed.entity.Category;
 import com.example.foodwed.entity.Recipe;
 import com.example.foodwed.entity.RecipeCategoryId;
@@ -12,6 +14,7 @@ import com.example.foodwed.exception.ErrorCode;
 import com.example.foodwed.repository.CategoryReponsitory;
 import com.example.foodwed.repository.RecipeCategoryRepository;
 import com.example.foodwed.repository.RecipeReponsitory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RecipeService {
@@ -35,7 +40,8 @@ public class RecipeService {
         return recipeReponsitory.findAllRecipes(pageable);
     }
 
-    public RecipeEditResponse create(RecipeCreateRequest recipeRequest) {
+
+    public RecipeEditlResponse create(RecipeCreateRequest recipeRequest) {
         // 1. Kiểm tra tất cả categoryId có tồn tại trong database không
         for (String categoryId : recipeRequest.getCategoryids()) {
             if (!categoryReponsitory.existsById(categoryId)) {
@@ -66,7 +72,7 @@ public class RecipeService {
         }
 
         // 4. Trả về phản hồi
-        return new RecipeEditResponse(savedRecipe, recipeRequest.getCategoryids());
+        return new RecipeEditlResponse(savedRecipe, recipeRequest.getCategoryids());
     }
 
 
@@ -85,7 +91,7 @@ public class RecipeService {
     }
 
 
-    public RecipeEditResponse update(RecipeUpdateRequest recipeRequest) {
+    public RecipeEditlResponse update(RecipeUpdateRequest recipeRequest) {
         // 1. Kiểm tra xem Recipe có tồn tại không
         Recipe recipe = recipeReponsitory.findById(recipeRequest.getRecipe().getId())
                 .orElseThrow(() -> new Appexception(ErrorCode.RECIPE_NOT_FOUND));
@@ -97,14 +103,22 @@ public class RecipeService {
             }
         }
 
+        Optional<Recipe> recipeOld = recipeReponsitory.findById(recipe.getId());
+
         // 3. Cập nhật các thuộc tính của Recipe
         recipe.setName(recipeRequest.getRecipe().getName());
         recipe.setDescription(recipeRequest.getRecipe().getDescription());
         recipe.setIngredien(recipeRequest.getRecipe().getIngredien());
-        recipe.setImage(recipeRequest.getRecipe().getImage());
+
         recipe.setTime(recipeRequest.getRecipe().getTime());
         recipe.setServes(recipeRequest.getRecipe().getServes());
         recipe.setStep(recipeRequest.getRecipe().getStep());
+        // kiểm tra có ảnh mới hay không
+        if (recipeRequest.getRecipe().getImage()==null){
+            recipe.setImage(recipeOld.get().getImage());
+        }else{
+            recipe.setImage(recipeRequest.getRecipe().getImage());
+        }
 
         Recipe updatedRecipe = recipeReponsitory.save(recipe);
 
@@ -122,7 +136,32 @@ public class RecipeService {
         }
 
         // 6. Trả về phản hồi
-        return new RecipeEditResponse(updatedRecipe, recipeRequest.getCategoryids());
+        return new RecipeEditlResponse(updatedRecipe, recipeRequest.getCategoryids());
+    }
+
+
+
+    public PaginatedResponse<RecipeDetailResponse> getAllPaginated(int page, int size) {
+        // Lấy danh sách recipe theo phân trang
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Recipe> recipePage = recipeReponsitory.findAll(pageRequest);
+
+
+        // Map các Recipe sang RecipeDetailResponse
+        List<RecipeDetailResponse> recipeDetails = recipePage.getContent().stream().map(recipe -> {
+            List<Category> categories = recipeCategoryRepository.findCategoriesByRecipeId(recipe.getId());
+            return new RecipeDetailResponse(recipe, categories);
+        }).collect(Collectors.toList());
+
+        // Trả về đối tượng PaginatedResponse
+        return new PaginatedResponse<>(
+                recipeDetails,
+                recipePage.getNumber(),
+                recipePage.getSize(),
+                recipePage.getTotalElements(),
+                recipePage.getTotalPages(),
+                recipePage.isLast()
+        );
     }
 
 }

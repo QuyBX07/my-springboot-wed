@@ -4,6 +4,7 @@ import com.example.foodwed.enums.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,22 +17,31 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final String[] PUBLIC_ENDPOINS = {"/auth/signup", "/auth/token", "/auth/introspect"};
-    private final String[] ADMIN_AUTHEN_GET = {};
+    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect"};
+    private final String[] PUBLIC_ENDPOINS_GET = {"/category","/suggestion/**","foodwed/images/**"};
+    private final String[] ADMIN_AUTHEN_GET = {"foodwed/recipe"};
     private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create"};
     private final String[] ADMIN_AUTHEN_PUT = {"/foodwed/recipe/update","/foodwed/category/update"};
     private final String[] ADMIN_AUTHEN_DELETE = {"/foodwed/recipe/delete","/foodwed/category/delete"};
-    private final String signerKey = "3OBF8MHgoEMo+8acrb2h2dBsegTQtbK0S8uKwMcdnTpBDbl7PKHvHS54R2uFn/aH";
+    private String signerKey = "GtuAkpoXNfZOhcfdgkDJQ+N1Pd1pDwlc0syKYXZPQJT2ZI+mlWkd8Go5XL6rz93j";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         httpSecurity.authorizeHttpRequests(request ->
-                request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINS).permitAll()
+                request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINS_POST).permitAll()
+                        .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINS_GET).permitAll()
+
                         .requestMatchers(HttpMethod.GET, ADMIN_AUTHEN_GET)
                         .hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, ADMIN_AUTHEN_POST)
@@ -72,4 +82,16 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(10);
     }
 
+    // Phương thức cấu hình CORS
+    @Bean
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));  // Cấu hình domain của frontend
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);  // Cho phép gửi cookie và thông tin xác thực
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);  // Áp dụng cho tất cả các endpoint
+        return source;
+    }
 }

@@ -19,11 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -32,6 +28,7 @@ import java.text.ParseException;
 @RequiredArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PACKAGE, makeFinal = true)
+@CrossOrigin(origins = "http://localhost:3000")  // Cho phép từ localhost:3000
 public class AuthController {
     @Autowired
     UserService userService;
@@ -50,6 +47,8 @@ public class AuthController {
     ApiRespone<AuthResponse> authenticate(@RequestBody AuthRequest request){
         var result = authService.authenticate(request);
         return ApiRespone.<AuthResponse>builder()
+                .status("success")
+                .message("đã đăng nhập thành công")
                 .result(result)
                 .build();
     }
