@@ -15,45 +15,51 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    private final String[] PUBLIC_ENDPOINS = {"/auth/signup", "/auth/token", "/auth/introspect"};
-    private String signerKey = "P+AXEr5YSjgWWwldDADpzU7qRTS+IyM00+fAPzA2MRBtInwe+WyVuxPCo/DpEqKd";
+    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect"};
+    private final String[] PUBLIC_ENDPOINS_GET = {"/category","/suggestion/**","foodwed/images/**"};
+    private final String[] ADMIN_AUTHEN_GET = {"foodwed/recipe"};
+    private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create"};
+    private final String[] ADMIN_AUTHEN_PUT = {"/foodwed/recipe/update","/foodwed/category/update"};
+    private final String[] ADMIN_AUTHEN_DELETE = {"/foodwed/recipe/delete","/foodwed/category/delete"};
+    private String signerKey = "GtuAkpoXNfZOhcfdgkDJQ+N1Pd1pDwlc0syKYXZPQJT2ZI+mlWkd8Go5XL6rz93j";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        // Cấu hình CORS
         httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()));
-
-        // Cấu hình bảo mật cho các endpoint
         httpSecurity.authorizeHttpRequests(request ->
-                request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINS).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/user")
+                request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINS_POST).permitAll()
+                        .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINS_GET).permitAll()
+
+                        .requestMatchers(HttpMethod.GET, ADMIN_AUTHEN_GET)
+                        .hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, ADMIN_AUTHEN_POST)
+                        .hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT,ADMIN_AUTHEN_PUT)
+                        .hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE,ADMIN_AUTHEN_DELETE)
                         .hasAnyAuthority(Role.ADMIN.name())
                         .anyRequest().authenticated());
-
-        // Cấu hình cho OAuth2 Resource Server
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
                 .jwtAuthenticationConverter(jwtAuthenticationConverter())));
 
-        // Tắt CSRF
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
-
         return httpSecurity.build();
     }
 
     @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter() {
+    JwtAuthenticationConverter jwtAuthenticationConverter(){
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
 
@@ -63,8 +69,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");
+    JwtDecoder jwtDecoder(){
+        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(),"HS512");
         return NimbusJwtDecoder
                 .withSecretKey(secretKeySpec)
                 .macAlgorithm(MacAlgorithm.HS512)
@@ -72,7 +78,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(10);
     }
 
