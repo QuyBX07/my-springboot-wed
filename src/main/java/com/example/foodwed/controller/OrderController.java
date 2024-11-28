@@ -3,6 +3,7 @@ package com.example.foodwed.controller;
 import com.example.foodwed.dto.Request.OrderCreateRequest;
 import com.example.foodwed.dto.Request.OrderUpdateRequest;
 import com.example.foodwed.dto.response.ApiRespone;
+import com.example.foodwed.dto.response.OrderResponse;
 import com.example.foodwed.dto.response.PaginatedResponse;
 import com.example.foodwed.entity.Orders;
 import com.example.foodwed.exception.Appexception;
@@ -67,6 +68,20 @@ public class OrderController {
         PaginatedResponse<Orders> response = orderService.getAllPaginated(page, size, isActive);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiRespone<PaginatedResponse<Orders>>(
+                        "success", "200", "Orders retrieved successfully", response
+                ));
+    }
+
+    @GetMapping("/uorder/{uid}")
+    public ResponseEntity<?> getAllByUid(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @PathVariable String uid
+    ) {
+        System.out.printf("h" + uid);
+        PaginatedResponse<OrderResponse> response = orderService.getOrderByUser(page, size, uid);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiRespone<PaginatedResponse<OrderResponse>>(
                         "success", "200", "Orders retrieved successfully", response
                 ));
     }

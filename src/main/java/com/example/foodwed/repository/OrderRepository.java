@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Orders,String> {
     Page<Orders> findByIsactive(boolean isactive, Pageable pageable);
+    Page<Orders> findByUid(String uid, Pageable pageable);
 }

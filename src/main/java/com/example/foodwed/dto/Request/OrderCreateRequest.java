@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 public class OrderCreateRequest {
 
     private String uid;
+    private String recipeid;
+    private String recipename;
     private String name;
     private String address;
     private int phone;

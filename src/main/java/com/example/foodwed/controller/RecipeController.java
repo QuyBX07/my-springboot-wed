@@ -32,7 +32,7 @@ public class RecipeController {
     @GetMapping("/recipeAll")
     public ResponseEntity<?> getAllRecipe(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "9") int size
+            @RequestParam(defaultValue = "12") int size
     ) {
         PaginatedResponse<RecipeResponse> response = recipeService.getAllRecipe(page, size);
         return ResponseEntity.status(HttpStatus.OK)

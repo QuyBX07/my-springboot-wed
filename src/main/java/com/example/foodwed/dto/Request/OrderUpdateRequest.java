@@ -11,13 +11,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-
 @Getter
 @Setter
 public class OrderUpdateRequest {
-
-
-    private String name;
     private String address;
     private int phone;
     private String ingredien;

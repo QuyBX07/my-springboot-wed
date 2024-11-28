@@ -1,10 +1,6 @@
 package com.example.foodwed.repository;
-
-import com.example.foodwed.dto.response.RecipeResponse;
 import com.example.foodwed.entity.Recipe;
 import com.example.foodwed.entity.Recipe_Category;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

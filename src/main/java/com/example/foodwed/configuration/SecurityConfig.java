@@ -29,6 +29,7 @@ import java.util.List;
 public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect"};
     private final String[] PUBLIC_ENDPOINS_GET = {"/category","/suggestion/**","foodwed/images/**", "/recipe/recipeAll","/search/**"};
+    private final String[] USER_AUTHEN_GET = {"/foodwed/order/uorder/**"};
     private final String[] ADMIN_AUTHEN_GET = {"foodwed/recipe","/foodwed/order"};
     private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create"};
     private final String[] ADMIN_AUTHEN_PUT = {"/foodwed/recipe/update","/foodwed/category/update"};
@@ -44,7 +45,8 @@ public class SecurityConfig {
 
                         // POST /foodwed/comments requires authentication (logged-in users only)
                         .requestMatchers(HttpMethod.POST, "/foodwed/comments").authenticated()
-
+                        .requestMatchers(HttpMethod.GET, USER_AUTHEN_GET)
+                        .hasAnyAuthority(Role.USER.name())
                         .requestMatchers(HttpMethod.GET, ADMIN_AUTHEN_GET)
                         .hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, ADMIN_AUTHEN_POST)

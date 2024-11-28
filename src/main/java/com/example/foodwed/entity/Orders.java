@@ -19,6 +19,8 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String uid;
+    private String recipeid;
+    private String recipename;
     private String name;
     private String address;
     private int phone;

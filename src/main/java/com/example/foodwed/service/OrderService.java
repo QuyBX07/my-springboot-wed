@@ -2,6 +2,7 @@ package com.example.foodwed.service;
 
 import com.example.foodwed.dto.Request.OrderCreateRequest;
 import com.example.foodwed.dto.Request.OrderUpdateRequest;
+import com.example.foodwed.dto.response.OrderResponse;
 import com.example.foodwed.dto.response.PaginatedResponse;
 import com.example.foodwed.entity.Orders;
 import com.example.foodwed.exception.Appexception;
@@ -15,12 +16,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
 
     /**
      * Tạo mới một đơn hàng
@@ -29,6 +32,8 @@ public class OrderService {
         Orders order = new Orders();
         // Thiết lập thời gian tạo đơn hàng
         order.setUid(request.getUid());
+        order.setRecipeid(request.getRecipeid());
+        order.setRecipename(request.getRecipename());
         order.setName(request.getName());
         order.setAddress(request.getAddress());
         order.setPhone(request.getPhone());
@@ -69,7 +74,6 @@ public class OrderService {
 
         // Cập nhật thông tin
 
-        existingOrder.setName(updatedOrder.getName());
         existingOrder.setAddress(updatedOrder.getAddress());
         existingOrder.setPhone(updatedOrder.getPhone());
         existingOrder.setIngredien(updatedOrder.getIngredien());
@@ -99,4 +103,30 @@ public class OrderService {
                 orderPage.isLast()
         );
     }
+    public PaginatedResponse<OrderResponse> getOrderByUser(int page, int size,String uid){
+
+        System.out.println("UID: " + uid);
+        PageRequest pageable = PageRequest.of(page, size , Sort.by(Sort.Direction.DESC, "orderTime"));
+        Page<Orders> orderPage = orderRepository.findByUid( uid,pageable);
+        System.out.printf(orderPage.toString());
+        System.out.println("Order Page: " + orderPage);
+        Page<OrderResponse> orderResponsePage = orderPage.map(order -> OrderResponse.builder()
+                .id(order.getId())
+                .uname(order.getName())
+                .recipename(order.getRecipename())
+                .totalPrice(order.getTotalPrice())
+                .isActive(order.isIsactive())
+                .build());
+
+        // Trả về đối tượng PaginatedResponse
+        return new PaginatedResponse<>(
+                orderResponsePage.getContent(),
+                orderResponsePage.getNumber(),
+                orderResponsePage.getSize(),
+                orderResponsePage.getTotalElements(),
+                orderResponsePage.getTotalPages(),
+                orderResponsePage.isLast()
+        );
+    }
+
 }
