@@ -5,6 +5,7 @@ import com.example.foodwed.dto.Request.RecipeUpdateRequest;
 import com.example.foodwed.dto.response.PaginatedResponse;
 import com.example.foodwed.dto.response.RecipeDetailResponse;
 import com.example.foodwed.dto.response.RecipeEditlResponse;
+import com.example.foodwed.dto.response.RecipeResponse;
 import com.example.foodwed.entity.Category;
 import com.example.foodwed.entity.Recipe;
 import com.example.foodwed.entity.RecipeCategoryId;
@@ -33,6 +34,31 @@ public class RecipeService {
     private CategoryReponsitory categoryReponsitory;
     @Autowired
     private RecipeCategoryRepository recipeCategoryRepository;
+
+    public PaginatedResponse<RecipeResponse> getAllRecipe(int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<Recipe> recipePage = recipeReponsitory.findAll(pageable);
+
+        // Map Recipe to RecipeResponse
+        List<RecipeResponse> recipeResponses = recipePage.getContent().stream()
+                .map(recipe -> new RecipeResponse(
+                        recipe.getId(),
+                        recipe.getName(),
+                        recipe.getImage()
+                ))
+                .toList();
+
+        return new PaginatedResponse<>(
+                recipeResponses, // Use the mapped list
+                recipePage.getNumber(),
+                recipePage.getSize(),
+                recipePage.getTotalElements(),
+                recipePage.getTotalPages(),
+                recipePage.isLast()
+        );
+    }
+
+
     public RecipeEditlResponse create(RecipeCreateRequest recipeRequest) {
         // 1. Kiểm tra tất cả categoryId có tồn tại trong database không
         for (String categoryId : recipeRequest.getCategoryids()) {
@@ -106,9 +132,9 @@ public class RecipeService {
         recipe.setServes(recipeRequest.getRecipe().getServes());
         recipe.setStep(recipeRequest.getRecipe().getStep());
         // kiểm tra có ảnh mới hay không
-        if (recipeRequest.getRecipe().getImage()==null){
+        if (recipeRequest.getRecipe().getImage() == null) {
             recipe.setImage(recipeOld.get().getImage());
-        }else{
+        } else {
             recipe.setImage(recipeRequest.getRecipe().getImage());
         }
         recipe.setPrice(recipeRequest.getRecipe().getPrice());
@@ -130,7 +156,6 @@ public class RecipeService {
         // 6. Trả về phản hồi
         return new RecipeEditlResponse(updatedRecipe, recipeRequest.getCategoryids());
     }
-
 
 
     public PaginatedResponse<RecipeDetailResponse> getAllPaginated(int page, int size) {

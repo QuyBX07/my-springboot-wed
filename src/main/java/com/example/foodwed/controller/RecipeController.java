@@ -2,15 +2,13 @@ package com.example.foodwed.controller;
 
 import com.example.foodwed.dto.Request.RecipeCreateRequest;
 import com.example.foodwed.dto.Request.RecipeUpdateRequest;
-import com.example.foodwed.dto.response.ApiRespone;
-import com.example.foodwed.dto.response.PaginatedResponse;
-import com.example.foodwed.dto.response.RecipeDetailResponse;
-import com.example.foodwed.dto.response.RecipeEditlResponse;
-import com.example.foodwed.entity.Category;
+import com.example.foodwed.dto.response.*;
 import com.example.foodwed.entity.Recipe;
 import com.example.foodwed.exception.Appexception;
 import com.example.foodwed.exception.ErrorCode;
 import com.example.foodwed.service.RecipeService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +28,21 @@ import java.util.UUID;
 public class RecipeController {
     @Autowired
     private RecipeService recipeService;
+
+    @GetMapping("/recipeAll")
+    public ResponseEntity<?> getAllRecipe(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size
+    ) {
+        PaginatedResponse<RecipeResponse> response = recipeService.getAllRecipe(page, size);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiRespone<>(
+                        "success",
+                        "200",
+                        "Recipes retrieved successfully",
+                        response
+                ));
+    }
 
     @PostMapping("/create")
     public ResponseEntity<?> createRecipe(@RequestParam("name") String name,
@@ -65,7 +78,7 @@ public class RecipeController {
         RecipeEditlResponse recipe =recipeService.create(request);
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                 new ApiRespone<RecipeEditlResponse>("success","200","Recipe create successfully",recipe)
+                new ApiRespone<RecipeEditlResponse>("success","200","Recipe create successfully",recipe)
         );
     }
     @PutMapping("/update")
