@@ -1,5 +1,6 @@
 package com.example.foodwed.controller;
 
+import com.example.foodwed.dto.response.RecipeResponse;
 import com.example.foodwed.entity.Recipe;
 import com.example.foodwed.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +20,15 @@ public class SearchController {
     private SearchService searchService;
 
     @GetMapping
-    public ResponseEntity<?> searchRecipe(@RequestParam String name) {
+    public ResponseEntity<?> searchRecipe(
+            @RequestParam String name,
+            @RequestParam(required = false) String categoryId) {
         try {
-            List<Recipe> recipeSearch = searchService.getSearch(name);
-
-            if (recipeSearch.isEmpty()) {
-                return ResponseEntity.ok("No recipes found!");
-            }
-
+            // Gọi service để tìm kiếm
+            List<RecipeResponse> recipeSearch = searchService.searchRecipes(name, categoryId);
             return ResponseEntity.ok(recipeSearch);
         } catch (IllegalArgumentException ex) {
-            // Return a 400 Bad Request response with the exception message
+            // Lỗi: Trả về 400 với thông báo lỗi
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
