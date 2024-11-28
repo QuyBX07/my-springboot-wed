@@ -38,6 +38,7 @@ public class RecipeController {
                                           @RequestParam("step") String step,
                                           @RequestParam("time") int time,
                                           @RequestParam("serves") int serves,
+                                          @RequestParam("price") int price,
                                           @RequestParam("categoryids") List<String> categoryids,
                                           @RequestParam("image") MultipartFile image) throws IOException {
 
@@ -55,6 +56,7 @@ public class RecipeController {
                 .step(step)
                 .time(time)
                 .serves(serves)
+                .price(price)
                 .categoryids(categoryids)
                 .image(imageName) // Chỉ lưu tên file
                 .build();
@@ -74,6 +76,7 @@ public class RecipeController {
                                           @RequestParam("step") String step,
                                           @RequestParam("time") int time,
                                           @RequestParam("serves") int serves,
+                                          @RequestParam("price") int price,
                                           @RequestParam("categoryids") List<String> categoryids,
                                           @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
 
@@ -86,7 +89,8 @@ public class RecipeController {
             Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
         }
 
-        Recipe recipe = new Recipe(id,ingredien,description,name,step,imageName,time,serves);
+        Recipe recipe = new Recipe(id,ingredien,description,name,step,imageName,time,serves,price);
+        System.out.print(recipe);
         // Tạo đối tượng RecipeUpdateRequest từ các tham số nhận được
         RecipeUpdateRequest request = RecipeUpdateRequest.builder()
                 .recipe(recipe)

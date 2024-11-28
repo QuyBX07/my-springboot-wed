@@ -23,6 +23,7 @@ public class Recipe {
     private String image;
     private int time;
     private int serves;
+    private int price;
 
 
 

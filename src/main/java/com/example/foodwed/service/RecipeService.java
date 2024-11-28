@@ -50,7 +50,7 @@ public class RecipeService {
         recipe.setTime(recipeRequest.getTime());
         recipe.setServes(recipeRequest.getServes());
         recipe.setStep(recipeRequest.getStep());
-
+        recipe.setPrice(recipeRequest.getPrice());
         Recipe savedRecipe = recipeReponsitory.save(recipe);
 
         // 3. Tạo các bản ghi Recipe_Category
@@ -111,7 +111,7 @@ public class RecipeService {
         }else{
             recipe.setImage(recipeRequest.getRecipe().getImage());
         }
-
+        recipe.setPrice(recipeRequest.getRecipe().getPrice());
         Recipe updatedRecipe = recipeReponsitory.save(recipe);
 
         // 4. Xóa các bản ghi Recipe_Category cũ liên quan đến Recipe này

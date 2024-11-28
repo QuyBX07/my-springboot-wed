@@ -12,7 +12,8 @@ public enum ErrorCode {
     CATEGORY_NOT_EXITED("fail",1008,"category not exited"),
     RECIPE_NOT_FOUND("fail",1009,"recipe not found"),
     USERNOTFOUND("fail",1010,"Người dùng không tồn tại"),
-    INVALIDPASSWORD("fail",1011,"Mật khẩu cũ không đúng")
+    INVALIDPASSWORD("fail",1011,"Mật khẩu cũ không đúng"),
+    ORDER_NOT_FOUND("fail", 1012,"Không tìm thấy order")
 
     ;
     ErrorCode(String status,int code, String message) {

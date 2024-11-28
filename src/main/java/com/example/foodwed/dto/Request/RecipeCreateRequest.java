@@ -19,6 +19,7 @@ public class RecipeCreateRequest {
     private String image;
     private int time;
     private int serves;
+    private int price;
     private List<String> categoryids;
 
 }
