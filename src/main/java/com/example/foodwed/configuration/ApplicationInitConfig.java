@@ -1,3 +1,4 @@
+
 package com.example.foodwed.configuration;
 
 import com.example.foodwed.entity.User;

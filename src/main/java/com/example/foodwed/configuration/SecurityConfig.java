@@ -42,6 +42,10 @@ public class SecurityConfig {
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINS_POST).permitAll()
                         .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINS_GET).permitAll()
 
+                        // POST /foodwed/comments requires authentication (logged-in users only)
+                        .requestMatchers(HttpMethod.POST, "/foodwed/comments").authenticated()
+                        .requestMatchers(HttpMethod.GET, USER_AUTHEN_GET)
+                        .hasAnyAuthority(Role.USER.name())
                         .requestMatchers(HttpMethod.GET, ADMIN_AUTHEN_GET)
                         .hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, ADMIN_AUTHEN_POST)
