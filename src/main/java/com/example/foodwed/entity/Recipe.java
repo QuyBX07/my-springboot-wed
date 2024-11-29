@@ -15,7 +15,6 @@ public class Recipe {
 
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-
     private String ingredien;
     private String description;
     private String name;
@@ -23,10 +22,6 @@ public class Recipe {
     private String image;
     private int time;
     private int serves;
-
-
-
-
-
+    private int price;
 
 }

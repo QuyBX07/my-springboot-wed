@@ -38,11 +38,13 @@ public class SecurityConfig {
     private final String[] USER_AUTHEN_GET = {"foodwed/favourites/user/**"};
     private final String[] USER_AUTHEN_POST ={"foodwed/favourites/add"};
     private final String[] USER_AUTHEN_DELETE = {"foodwed/favourites/delete/**"};
+    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect","/auth/google"};
+    private final String[] PUBLIC_ENDPOINS_GET = {"/category","/suggestion/**","foodwed/images/**"};
     private final String[] ADMIN_AUTHEN_GET = {"foodwed/recipe"};
     private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create"};
     private final String[] ADMIN_AUTHEN_PUT = {"/foodwed/recipe/update","/foodwed/category/update"};
     private final String[] ADMIN_AUTHEN_DELETE = {"/foodwed/recipe/delete","/foodwed/category/delete"};
-    private String signerKey = "stS7vKuQ+zyWHoU/34X7B2TZrM8I8mFZ1cGI7DTZ++PgMf/GV4kd32WSm0IZ2RJ8";
+    private String signerKey = "GtuAkpoXNfZOhcfdgkDJQ+N1Pd1pDwlc0syKYXZPQJT2ZI+mlWkd8Go5XL6rz93j";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -50,6 +52,11 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request ->
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINS_POST).permitAll()
                         .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINS_GET).permitAll()
+
+                        // POST /foodwed/comments requires authentication (logged-in users only)
+                        .requestMatchers(HttpMethod.POST, "/foodwed/comments").authenticated()
+                        .requestMatchers(HttpMethod.GET, USER_AUTHEN_GET)
+                        .hasAnyAuthority(Role.USER.name())
                         .requestMatchers(HttpMethod.GET, ADMIN_AUTHEN_GET)
                         .hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, ADMIN_AUTHEN_POST)
