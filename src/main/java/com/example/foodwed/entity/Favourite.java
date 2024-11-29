@@ -13,15 +13,17 @@ public class Favourite {
     private FavouriteId id;
 
     @ManyToOne
-    @MapsId("userid") // Ánh xạ tới khóa ngoại "userid" trong FavouriteId
+    @MapsId("userid")  // Ánh xạ tới khóa ngoại "userid" trong FavouriteId
     @JoinColumn(name = "userid")
     private User user;
 
     @ManyToOne
-    @MapsId("recipeid") // Ánh xạ tới khóa ngoại "recipeid" trong FavouriteId
+    @MapsId("recipeid")  // Ánh xạ tới khóa ngoại "recipeid" trong FavouriteId
     @JoinColumn(name = "recipeid")
     private Recipe recipe;
-    public FavouriteId getId(){
+
+    // Getter và setter cho id
+    public FavouriteId getId() {
         return id;
     }
 
@@ -29,6 +31,7 @@ public class Favourite {
         this.id = id;
     }
 
+    // Getter và setter cho user
     public User getUser() {
         return user;
     }
@@ -37,6 +40,7 @@ public class Favourite {
         this.user = user;
     }
 
+    // Getter và setter cho recipe
     public Recipe getRecipe() {
         return recipe;
     }

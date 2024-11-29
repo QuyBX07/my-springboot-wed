@@ -121,4 +121,19 @@ public class RecipeController {
         );
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+    @GetMapping("/recipeDetail/{recipeId}")
+    public ResponseEntity<?> getRecipeDetail(@PathVariable String recipeId) {
+
+        RecipeDetailResponse recipeResponse = recipeService.getDetailRecipe(recipeId);
+        // Trả về 404 nếu không tìm thấy món ăn
+        if (recipeResponse == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Trả về RecipeResponse với mã trạng thái 200 OK
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ApiRespone<RecipeDetailResponse>("success","200","Recipe successfully",recipeResponse)
+        );
+    }
+
 }
