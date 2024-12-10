@@ -33,14 +33,13 @@ public class SecurityConfig {
             "/suggestion/**",
             "/recipe/recipeDetail/**",
             "foodwed/images/**",
-            "recipe/recipeAll"
+            "recipe/recipeAll",
+            "/comments/**"
 
     };
     private final String[] USER_AUTHEN_GET = {"foodwed/favourites/user/**"};
-    private final String[] USER_AUTHEN_POST ={"foodwed/favourites/add"};
+    private final String[] USER_AUTHEN_POST ={"foodwed/favourites/add/**",};
     private final String[] USER_AUTHEN_DELETE = {"foodwed/favourites/delete/**"};
-    private final String[] PUBLIC_ENDPOINS_GET = {"/category","/suggestion/**","foodwed/images/**", "/comments/**"};
-    private final String[] USER_AUTHEN_GET = {"favorite/user/**"};
     private final String[] ADMIN_AUTHEN_GET = {"foodwed/recipe"};
     private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create"};
     private final String[] ADMIN_AUTHEN_PUT = {"/foodwed/recipe/update","/foodwed/category/update"};
@@ -66,7 +65,13 @@ public class SecurityConfig {
                         .hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE,ADMIN_AUTHEN_DELETE)
                         .hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST,USER_AUTHEN_POST)
+                        .hasAnyAuthority(Role.USER.name())
+                        .requestMatchers(HttpMethod.DELETE,USER_AUTHEN_DELETE)
+                        .hasAnyAuthority(Role.USER.name())
+
                         .anyRequest().authenticated());
+
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
                 .jwtAuthenticationConverter(jwtAuthenticationConverter())));
 
