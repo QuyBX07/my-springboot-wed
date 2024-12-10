@@ -5,18 +5,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime; // Import LocalDateTime
 
 @Entity
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String cmtid;
-    private String userid;
+    private String userid;      // ID của người dùng
+    private String fullname;    // Thêm fullname của người dùng
     private String recipeid;
     private String content;
-    private String parentCmtid; // sửa tên thành camelCase
-    private LocalDate date = LocalDate.now(); // mặc định là ngày hiện tại
+    private String parentCmtid;
+    private LocalDateTime date = LocalDateTime.now();
+
+    // Getters và Setters
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
 
     public String getCmtid() {
         return cmtid;
@@ -58,11 +68,11 @@ public class Comment {
         this.parentCmtid = parentCmtid;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 }
