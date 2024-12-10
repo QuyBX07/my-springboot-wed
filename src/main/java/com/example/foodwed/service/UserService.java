@@ -66,5 +66,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-
+    // Lấy fullname từ userId
+    public String getFullnameByUserId(String userId) {
+        return userRepository.findById(userId)
+                .map(User::getFullname)
+                .orElse("Anonymous"); // Trả về "Anonymous" nếu không tìm thấy user
+    }
 }

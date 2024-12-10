@@ -180,5 +180,21 @@ public class RecipeService {
                 recipePage.isLast()
         );
     }
+    public RecipeDetailResponse getDetailRecipe(String recipeId) {
+        Recipe recipe = recipeReponsitory.findById(recipeId).orElse(null);
+
+        if (recipe == null) {
+            return null;  // Trả về null nếu không tìm thấy món ăn
+        }
+
+        // Lấy danh sách category từ repository
+        List<Category> categories = recipeCategoryRepository.findCategoriesByRecipeId(recipeId);
+
+        // Tạo và trả về đối tượng RecipeDetailResponse
+        RecipeDetailResponse response = new RecipeDetailResponse(recipe, categories);
+
+        return response;
+    }
+
 
 }
