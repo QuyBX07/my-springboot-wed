@@ -84,4 +84,24 @@ public class OrderController {
                         "success", "200", "Orders retrieved successfully", response
                 ));
     }
+
+    @GetMapping("/orderDetail/{id}")
+    public ResponseEntity<?> getDetailOrder(@PathVariable String id) {
+        Orders order = orderService.getDetailOrder(id);
+
+        if (order == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiRespone<String>(
+                            "error", "404", "Order not found", null
+                    ));
+        }
+
+        // Nếu đơn hàng tồn tại, trả về chi tiết đơn hàng
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiRespone<Orders>(
+                        "success", "200", "Order retrieved successfully", order
+                ));
+    }
+
+
 }

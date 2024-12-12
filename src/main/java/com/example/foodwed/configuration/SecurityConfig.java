@@ -37,7 +37,7 @@ public class SecurityConfig {
             "/comments/**",
             "/search/**"
     };
-    private final String[] USER_AUTHEN_GET = {"foodwed/favourites/user/**", "foodwed/order/uorder/**"};
+    private final String[] USER_AUTHEN_GET = {"foodwed/favourites/user/**", "foodwed/order/uorder/**","foodwed/order/orderDetail/**" };
     private final String[] USER_AUTHEN_POST ={"foodwed/favourites/add/**","/foodwed/comments"};
     private final String[] USER_AUTHEN_DELETE = {"foodwed/favourites/delete/**"};
     private final String[] ADMIN_AUTHEN_GET = {"foodwed/recipe"};

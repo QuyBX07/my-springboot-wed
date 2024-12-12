@@ -28,7 +28,7 @@ public class RandomRecipeService {
         List<Recipe> randomRecipes = recipes.stream().limit(8).collect(Collectors.toList());
 
         return randomRecipes.stream()
-                .map(recipe -> new RecipeResponse(recipe.getId(), recipe.getName(), recipe.getImage()))
+                .map(recipe -> new RecipeResponse(recipe.getId(), recipe.getName(), recipe.getImage(), recipe.getServes(), recipe.getTime()))
                 .collect(Collectors.toList());
     }
 
