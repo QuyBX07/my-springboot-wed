@@ -145,10 +145,6 @@
 			<version>1.40.1</version>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-oauth2-client</artifactId>-->
-<!--		</dependency>-->
 
 		<!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-gmail -->
 		<dependency>
