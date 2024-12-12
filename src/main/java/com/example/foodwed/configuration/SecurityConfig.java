@@ -39,9 +39,7 @@ public class SecurityConfig {
     };
     private final String[] USER_AUTHEN_GET = {"foodwed/favourites/user/**", "foodwed/order/uorder/**"};
     private final String[] USER_AUTHEN_POST ={"foodwed/favourites/add/**","/foodwed/comments"};
-    private final String[] USER_AUTHEN_DELETE = {"foodwed/favourites/delete/**"};
-    private final String[] PUBLIC_ENDPOINS_GET = {"/category","/suggestion/**","foodwed/images/**", "/comments/**"};
-    private final String[] USER_AUTHEN_GET = {"favorite/user/**"};
+    private final String[] USER_AUTHEN_DELETE = {"/foodwed/favourites/delete/**"};
     private final String[] ADMIN_AUTHEN_GET = {"foodwed/recipe"};
     private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create"};
     private final String[] ADMIN_AUTHEN_PUT = {"/foodwed/recipe/update","/foodwed/category/update"};
