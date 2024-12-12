@@ -130,6 +130,11 @@
 			<version>1.6.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>jakarta.mail</groupId>
+			<artifactId>jakarta.mail-api</artifactId>
+			<version>2.1.0</version> <!-- Use the version compatible with your project -->
+		</dependency>
 		<!-- Spring Boot Starter Mail (JavaMail hỗ trợ Spring Boot) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

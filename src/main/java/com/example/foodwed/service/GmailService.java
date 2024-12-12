@@ -1,75 +1,81 @@
-// GmailService.java
 package com.example.foodwed.service;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.model.Message;
-import org.springframework.beans.factory.annotation.Value;
+import com.example.foodwed.entity.Email;
+import com.example.foodwed.repository.EmailRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Properties;
 
 @Service
 public class GmailService {
 
-    @Value("${gmail.oauth2.access-token}")
-    private String accessToken;
+    @Autowired
+    private JavaMailSender mailSender;
 
-    private static final String APPLICATION_NAME = "FoodWed";
-    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+    @Autowired
+    private EmailRepository emailRepository;
 
-    private Gmail createGmailService() throws GeneralSecurityException, IOException {
-        GoogleCredential credential = new GoogleCredential().setAccessToken(accessToken);
-        return new Gmail.Builder(
-                GoogleNetHttpTransport.newTrustedTransport(),
-                JSON_FACTORY,
-                credential
-        ).setApplicationName(APPLICATION_NAME).build();
+    /**
+     * Gửi email đến tất cả email trong cơ sở dữ liệu.
+     *
+     * @param subject Chủ đề của email.
+     * @param message Nội dung của email.
+     */
+    public void sendBulkEmails(String subject, String message) {
+        List<Email> emails = emailRepository.findAll();
+        if (emails.isEmpty()) {
+            throw new IllegalArgumentException("No email addresses found in the database.");
+        }
+
+        emails.forEach(email -> {
+            sendEmail(email.getEmailAddress(), subject, message);
+        });
     }
 
-    private MimeMessage createMimeMessage(String to, String from, String subject, String bodyText) throws MessagingException {
-        Properties props = new Properties();
-        Session session = Session.getDefaultInstance(props, null);
-        MimeMessage email = new MimeMessage(session);
-        email.setFrom(new InternetAddress(from));
-        email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
-        email.setSubject(subject);
-        email.setText(bodyText);
-        return email;
-    }
-
-    private Message createMessage(MimeMessage mimeMessage) throws MessagingException, IOException {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        mimeMessage.writeTo(buffer);
-        byte[] rawEmailBytes = buffer.toByteArray();
-        String encodedEmail = Base64.getUrlEncoder().encodeToString(rawEmailBytes);
-        Message message = new Message();
-        message.setRaw(encodedEmail);
-        return message;
-    }
-
-    public void sendEmails(List<String> recipientEmails, String subject, String bodyText) {
+    /**
+     * Gửi một email đơn lẻ.
+     *
+     * @param toEmail Địa chỉ email người nhận.
+     * @param subject Chủ đề của email.
+     * @param message Nội dung của email.
+     */
+    private void sendEmail(String toEmail, String subject, String message) {
         try {
-            Gmail gmailService = createGmailService();
-            for (String recipient : recipientEmails) {
-                MimeMessage mimeMessage = createMimeMessage(recipient, "me", subject, bodyText);
-                Message message = createMessage(mimeMessage);
-                gmailService.users().messages().send("me", message).execute();
-            }
+            // Cấu hình JavaMailSender
+            JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+            mailSender.setHost("smtp.gmail.com");
+            mailSender.setPort(587); // Cổng gửi email
+            mailSender.setUsername("hieu0190066@huce.edu.vn"); // Thay bằng địa chỉ email của bạn
+            mailSender.setPassword("udhs zqvc qhcs ngkp"); // Thay bằng mật khẩu của bạn
+
+            // Cấu hình các thuộc tính SMTP
+            Properties props = mailSender.getJavaMailProperties();
+            props.put("mail.smtp.host", "smtp.office365.com");
+            props.setProperty("mail.smtp.starttls.enable", "true"); // Bật STARTTLS
+            props.put("mail.smtp.post", "587");
+            props.put("mail.smtp.auth", true);
+            props.put("mail.smtp.starttls.enable", true);
+            props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2"); // Cấu hình sử dụng TLSv1.2
+            props.setProperty("mail.smtp.auth", "true"); // Bật xác thực
+            props.put("mail.smtp.ssl.trust", "*");
+
+            // Tạo email và gửi
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(toEmail);
+            mailMessage.setSubject(subject);
+            mailMessage.setText(message);
+            mailMessage.setFrom("hieu0190066@huce.edu.vn"); // Thay bằng địa chỉ email của bạn
+
+            mailSender.send(mailMessage);
+            System.out.println("Email sent to: " + toEmail);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to send email: " + e.getMessage());
+            System.err.println("Error sending email to: " + toEmail + " - " + e.getMessage());
+            throw e; // Rethrow để xử lý ở controller
         }
     }
 }
