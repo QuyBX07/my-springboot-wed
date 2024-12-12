@@ -27,18 +27,22 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect","/auth/google"};
+//    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect","/auth/google","/emails"};
+//    private final String[] PUBLIC_ENDPOINS_GET = {"/category","/suggestion/**","foodwed/images/**", "/comments/**","emails"};
+//    private final String[] USER_AUTHEN_GET = {"favorite/user/**"};
+    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect","/auth/google","emails","gmail/**"};
     private final String[] PUBLIC_ENDPOINS_GET = {
             "/category",
             "/suggestion/**",
             "/recipe/recipeDetail/**",
             "foodwed/images/**",
             "recipe/recipeAll",
-            "/comments/**"
-
+            "/comments/**",
+            "/search/**",
+            "emails"
     };
-    private final String[] USER_AUTHEN_GET = {"foodwed/favourites/user/**"};
-    private final String[] USER_AUTHEN_POST ={"foodwed/favourites/add","foodwed/order/create"};
+    private final String[] USER_AUTHEN_GET = {"foodwed/favourites/user/**", "foodwed/order/uorder/**"};
+    private final String[] USER_AUTHEN_POST ={"foodwed/favourites/add/**","/foodwed/comments"};
     private final String[] USER_AUTHEN_DELETE = {"foodwed/favourites/delete/**"};
     private final String[] ADMIN_AUTHEN_GET = {"foodwed/recipe"};
     private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create"};
@@ -52,9 +56,6 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request ->
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINS_POST).permitAll()
                         .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINS_GET).permitAll()
-
-                        // POST /foodwed/comments requires authentication (logged-in users only)
-                        .requestMatchers(HttpMethod.POST, "/comments").authenticated()
                         .requestMatchers(HttpMethod.GET, USER_AUTHEN_GET)
                         .hasAnyAuthority(Role.USER.name())
                         .requestMatchers(HttpMethod.GET, ADMIN_AUTHEN_GET)
