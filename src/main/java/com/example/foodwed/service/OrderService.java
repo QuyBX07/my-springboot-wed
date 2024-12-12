@@ -130,7 +130,6 @@ public class OrderService {
     }
     public Orders getDetailOrder(String id){
         Orders order = orderRepository.findById(id).orElse(null);
-        order.setIngredien(order.getIngredien());
         return order;
     }
 
