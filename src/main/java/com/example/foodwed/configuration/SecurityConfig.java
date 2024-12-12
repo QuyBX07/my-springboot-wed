@@ -27,7 +27,10 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect","/auth/google"};
+//    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect","/auth/google","/emails"};
+//    private final String[] PUBLIC_ENDPOINS_GET = {"/category","/suggestion/**","foodwed/images/**", "/comments/**","emails"};
+//    private final String[] USER_AUTHEN_GET = {"favorite/user/**"};
+    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect","/auth/google","emails","gmail/**","auth/forgot-password"};
     private final String[] PUBLIC_ENDPOINS_GET = {
             "/category",
             "/suggestion/**",
@@ -35,11 +38,12 @@ public class SecurityConfig {
             "foodwed/images/**",
             "recipe/recipeAll",
             "/comments/**",
-            "/search/**"
+            "/search/**",
+            "emails"
     };
     private final String[] USER_AUTHEN_GET = {"foodwed/favourites/user/**", "foodwed/order/uorder/**","foodwed/order/orderDetail/**" };
     private final String[] USER_AUTHEN_POST ={"foodwed/favourites/add/**","/foodwed/comments"};
-    private final String[] USER_AUTHEN_DELETE = {"foodwed/favourites/delete/**"};
+    private final String[] USER_AUTHEN_DELETE = {"/foodwed/favourites/delete/**"};
     private final String[] ADMIN_AUTHEN_GET = {"foodwed/recipe"};
     private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create"};
     private final String[] ADMIN_AUTHEN_PUT = {"/foodwed/recipe/update","/foodwed/category/update"};

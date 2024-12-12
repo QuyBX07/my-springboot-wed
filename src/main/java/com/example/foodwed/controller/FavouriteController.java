@@ -26,18 +26,14 @@ public class FavouriteController {
         Favourite favourite = favouriteService.addRecipeToFavourites(recipeId, userId);
         return ResponseEntity.ok(favourite);
     }
-    @DeleteMapping("/delete/{userId}/{recipeId}")
-    public ResponseEntity<Favourite> deleteFavourite(@PathVariable String userId, @PathVariable String recipeId) {
-        // Tạo fvid tự động (ví dụ: UUID)
-        String fvid = UUID.randomUUID().toString();  // Tạo fvid tự động
-
-        // Tạo FavouriteId từ fvid, userId và recipeId
-        FavouriteId favouriteId = new FavouriteId(fvid, userId, recipeId);
-
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteFavourite(@RequestParam String userId, @RequestParam String recipeId) {
         // Gọi phương thức xóa trong service
-        Favourite favourite = favouriteService.deleteRecipeFromFavourites(favouriteId);
+        favouriteService.deleteRecipeFromFavourites(userId, recipeId);
 
-        return ResponseEntity.ok(favourite);
+        // Trả về phản hồi thành công
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiRespone<String>("success", "200", "Recipe deleted successfully", "delete success"));
     }
 
     /**

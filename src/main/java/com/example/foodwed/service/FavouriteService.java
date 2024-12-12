@@ -56,17 +56,10 @@ public class FavouriteService {
         return favouriteReponsitory.save(favourite);
     }
 
-    public Favourite deleteRecipeFromFavourites(FavouriteId favouriteId) {
-        // Tìm đối tượng Favourite trước khi xóa
-        Favourite favourite = favouriteReponsitory.findById(favouriteId)
-                .orElseThrow(() -> new RuntimeException("Favourite with ID " + favouriteId + " not found"));
+    public void deleteRecipeFromFavourites(String userid, String recipeid) {
 
-        // Xóa đối tượng Favourite
-        favouriteReponsitory.deleteById(favouriteId);
-
-        // Trả về đối tượng đã xóa
-        return favourite;
-    }
+        favouriteReponsitory.deleteByUserUseridAndRecipeRecipeId(userid, recipeid);
+    };
 
     /**
      * Lấy danh sách các món ăn yêu thích của một người dùng.
