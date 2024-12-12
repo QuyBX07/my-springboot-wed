@@ -38,7 +38,7 @@ public class SecurityConfig {
 
     };
     private final String[] USER_AUTHEN_GET = {"foodwed/favourites/user/**"};
-    private final String[] USER_AUTHEN_POST ={"foodwed/favourites/add",};
+    private final String[] USER_AUTHEN_POST ={"foodwed/favourites/add","foodwed/order/create"};
     private final String[] USER_AUTHEN_DELETE = {"foodwed/favourites/delete/**"};
     private final String[] ADMIN_AUTHEN_GET = {"foodwed/recipe"};
     private final String[] ADMIN_AUTHEN_POST = {"/foodwed/recipe/create","/foodwed/category/create"};
@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINS_GET).permitAll()
 
                         // POST /foodwed/comments requires authentication (logged-in users only)
-                        .requestMatchers(HttpMethod.POST, "/foodwed/comments").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/comments").authenticated()
                         .requestMatchers(HttpMethod.GET, USER_AUTHEN_GET)
                         .hasAnyAuthority(Role.USER.name())
                         .requestMatchers(HttpMethod.GET, ADMIN_AUTHEN_GET)
