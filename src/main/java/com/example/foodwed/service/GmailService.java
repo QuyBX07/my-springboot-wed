@@ -78,4 +78,16 @@ public class GmailService {
             throw e; // Rethrow để xử lý ở controller
         }
     }
+
+    public void sendResetPasswordEmail(String toEmail, String newPassword) {
+        String subject = "Khôi phục mật khẩu Daily Cook";
+        String message = "Xin chào,\n\n"
+                + "Mật khẩu mới của bạn là: " + newPassword + "\n\n"
+                + "Vui lòng đăng nhập và đổi mật khẩu ngay lập tức.\n\n"
+                + "Trân trọng,\n"
+                + "Đội ngũ Daily Cook";
+
+        sendEmail(toEmail, subject, message);
+    }
+
 }

@@ -30,7 +30,7 @@ public class SecurityConfig {
 //    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect","/auth/google","/emails"};
 //    private final String[] PUBLIC_ENDPOINS_GET = {"/category","/suggestion/**","foodwed/images/**", "/comments/**","emails"};
 //    private final String[] USER_AUTHEN_GET = {"favorite/user/**"};
-    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect","/auth/google","emails","gmail/**"};
+    private final String[] PUBLIC_ENDPOINS_POST = {"/auth/signup", "/auth/token", "/auth/introspect","/auth/google","emails","gmail/**","auth/forgot-password"};
     private final String[] PUBLIC_ENDPOINS_GET = {
             "/category",
             "/suggestion/**",
