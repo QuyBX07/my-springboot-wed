@@ -78,7 +78,6 @@ public class OrderController {
             @RequestParam(defaultValue = "3") int size,
             @PathVariable String uid
     ) {
-        System.out.printf("h" + uid);
         PaginatedResponse<OrderResponse> response = orderService.getOrderByUser(page, size, uid);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiRespone<PaginatedResponse<OrderResponse>>(
