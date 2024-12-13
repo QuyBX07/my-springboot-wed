@@ -56,7 +56,7 @@ public class RecipeController {
                                           @RequestParam("image") MultipartFile image) throws IOException {
 
         // 1. Lưu file ảnh vào thư mục trên server
-        String uploadDir = "D:/spring/font-end/Share-Recipes/src/assests/images"; // Đường dẫn lưu ảnh
+        String uploadDir = "E:/BTLSpringboot/my-app/src/assests/images"; // Đường dẫn lưu ảnh
         String imageName = UUID.randomUUID().toString() + "-" + image.getOriginalFilename(); // Tạo tên file duy nhất
         Path imagePath = Paths.get(uploadDir, imageName);
         Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
@@ -81,7 +81,7 @@ public class RecipeController {
                 new ApiRespone<RecipeEditlResponse>("success","200","Recipe create successfully",recipe)
         );
     }
-    @PutMapping("/update")
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<?> updateRecipe(@RequestParam("id") String id,
                                           @RequestParam("name") String name,
                                           @RequestParam("description") String description,
@@ -94,9 +94,10 @@ public class RecipeController {
                                           @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
 
         // Lưu ảnh mới nếu có
+        System.out.print(image);
         String imageName = null;
         if (image != null && !image.isEmpty()) {
-            String uploadDir = "D:/spring/font-end/Share-Recipes/src/assests/images"; // Đường dẫn lưu ảnh
+            String uploadDir = "E:/BTLSpringboot/my-app/src/assests/images"; // Đường dẫn lưu ảnh
             imageName = UUID.randomUUID().toString() + "-" + image.getOriginalFilename(); // Tạo tên file duy nhất
             Path imagePath = Paths.get(uploadDir, imageName);
             Files.copy(image.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);

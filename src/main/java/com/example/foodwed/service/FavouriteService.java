@@ -29,31 +29,33 @@ public class FavouriteService {
     private RecipeReponsitory recipeReponsitory;
 
     public Favourite addRecipeToFavourites(String recipeId, String userId) {
-        // Tạo một đối tượng FavouriteId với fvid tự động tạo (ở đây ta sử dụng UUID để tạo fvid)
-        String fvid = UUID.randomUUID().toString(); // Tạo fvid tự động bằng UUID
-        FavouriteId favouriteId = new FavouriteId(fvid, userId, recipeId);
+        // Kiểm tra xem User có tồn tại không
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+        // Kiểm tra xem Recipe có tồn tại không
+        Recipe recipe = recipeReponsitory.findById(recipeId)
+                .orElseThrow(() -> new IllegalArgumentException("Recipe not found with ID: " + recipeId));
 
         // Kiểm tra xem Favourite đã tồn tại chưa
-        Optional<Favourite> existingFavourite = favouriteReponsitory.findById(favouriteId);
-        if (existingFavourite.isPresent()) {
+        boolean isFavouriteExists = favouriteReponsitory.existsByUserAndRecipe(userId, recipeId);
+        if (isFavouriteExists) {
             throw new IllegalStateException("This recipe is already in the favourites list");
         }
 
-        // Tạo đối tượng Favourite mới
+        String fvid = UUID.randomUUID().toString(); // Tạo fvid tự động bằng UUID
+        FavouriteId favouriteId = new FavouriteId(fvid, userId, recipeId);
         Favourite favourite = new Favourite();
-        favourite.setId(favouriteId);  // Thiết lập khóa chính tổng hợp
-
-        // Tùy chọn: lấy đối tượng User và Recipe từ database (nếu cần ánh xạ đầy đủ)
-        User user = userRepository.findById(userId).orElseThrow(() ->
-                new IllegalArgumentException("User not found with ID: " + userId));
-        Recipe recipe = recipeReponsitory.findById(recipeId).orElseThrow(() ->
-                new IllegalArgumentException("Recipe not found with ID: " + recipeId));
-
-        favourite.setUser(user);      // Thiết lập quan hệ với User
-        favourite.setRecipe(recipe);  // Thiết lập quan hệ với Recipe
+        favourite.setId(favouriteId);
+        favourite.setUser(user);
+        favourite.setRecipe(recipe);
 
         // Lưu Favourite vào database
         return favouriteReponsitory.save(favourite);
+    }
+    public boolean isExits(String recipeId, String userId){
+        boolean isFavouriteExists = favouriteReponsitory.existsByUserAndRecipe(userId, recipeId);
+        return isFavouriteExists;
     }
 
     public void deleteRecipeFromFavourites(String userid, String recipeid) {
