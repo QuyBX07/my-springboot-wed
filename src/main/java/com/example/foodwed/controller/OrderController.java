@@ -103,5 +103,36 @@ public class OrderController {
                 ));
     }
 
+    @GetMapping("/uorder/{uid}/Active")
+    public ResponseEntity<?> getActiveOrder(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @PathVariable String uid
+    ) {
+        PaginatedResponse<OrderResponse> response = orderService.getActiveOrder( uid, page, size);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiRespone<PaginatedResponse<OrderResponse>>(
+                        "success", "200", "Orders retrieved successfully", response
+                ));
+    }
+
+    @GetMapping("/uorder/{uid}/InActive")
+    public ResponseEntity<?> getInActiveOrder(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @PathVariable String uid
+    ) {
+        PaginatedResponse<OrderResponse> response = orderService.getInActiveOrder(uid, page, size);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiRespone<PaginatedResponse<OrderResponse>>(
+                        "success", "200", "Orders retrieved successfully", response
+                ));
+    }
+
+
+
+
+
+
 
 }

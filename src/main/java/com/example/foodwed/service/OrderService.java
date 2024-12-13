@@ -104,12 +104,8 @@ public class OrderService {
         );
     }
     public PaginatedResponse<OrderResponse> getOrderByUser(int page, int size,String uid){
-
-        System.out.println("UID: " + uid);
         PageRequest pageable = PageRequest.of(page, size , Sort.by(Sort.Direction.DESC, "orderTime"));
         Page<Orders> orderPage = orderRepository.findByUid( uid,pageable);
-        System.out.printf(orderPage.toString());
-        System.out.println("Order Page: " + orderPage);
         Page<OrderResponse> orderResponsePage = orderPage.map(order -> OrderResponse.builder()
                 .id(order.getId())
                 .uname(order.getName())
@@ -131,6 +127,46 @@ public class OrderService {
     public Orders getDetailOrder(String id){
         Orders order = orderRepository.findById(id).orElse(null);
         return order;
+    }
+    public PaginatedResponse<OrderResponse> getActiveOrder( String uid, int page, int size){
+        PageRequest pageable = PageRequest.of(page, size , Sort.by(Sort.Direction.DESC, "orderTime"));
+        Page<Orders> orderPage = orderRepository.findActiveOrders(uid, pageable);
+        Page<OrderResponse> orderResponsePage = orderPage.map(order -> OrderResponse.builder()
+                .id(order.getId())
+                .uname(order.getName())
+                .recipename(order.getRecipename())
+                .totalPrice(order.getTotalPrice())
+                .isActive(order.isIsactive())
+                .build());
+        // Trả về đối tượng PaginatedResponse
+        return new PaginatedResponse<>(
+                orderResponsePage.getContent(),
+                orderResponsePage.getNumber(),
+                orderResponsePage.getSize(),
+                orderResponsePage.getTotalElements(),
+                orderResponsePage.getTotalPages(),
+                orderResponsePage.isLast()
+        );
+    }
+    public PaginatedResponse<OrderResponse> getInActiveOrder(String uid, int page, int size){
+        PageRequest pageable = PageRequest.of(page, size , Sort.by(Sort.Direction.DESC, "orderTime"));
+        Page<Orders> orderPage = orderRepository.findInactiveOrders(uid, pageable);
+        Page<OrderResponse> orderResponsePage = orderPage.map(order -> OrderResponse.builder()
+                .id(order.getId())
+                .uname(order.getName())
+                .recipename(order.getRecipename())
+                .totalPrice(order.getTotalPrice())
+                .isActive(order.isIsactive())
+                .build());
+        // Trả về đối tượng PaginatedResponse
+        return new PaginatedResponse<>(
+                orderResponsePage.getContent(),
+                orderResponsePage.getNumber(),
+                orderResponsePage.getSize(),
+                orderResponsePage.getTotalElements(),
+                orderResponsePage.getTotalPages(),
+                orderResponsePage.isLast()
+        );
     }
 
 }
