@@ -26,5 +26,7 @@ public interface FavouriteReponsitory extends JpaRepository<Favourite, Favourite
     @Query("DELETE FROM Favourite f WHERE f.user.userid = :userId AND f.recipe.id = :recipeId")
     void deleteByUserUseridAndRecipeRecipeId(@Param("userId") String userid,
                                              @Param("recipeId") String id);
+    @Query("SELECT COUNT(f) > 0 FROM Favourite f WHERE f.user.userid = :userId AND f.recipe.id = :recipeId")
+    boolean existsByUserAndRecipe(@Param("userId") String userId, @Param("recipeId") String recipeId);
 
 }
