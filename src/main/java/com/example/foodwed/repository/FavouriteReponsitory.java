@@ -21,6 +21,7 @@ public interface FavouriteReponsitory extends JpaRepository<Favourite, Favourite
      * @return Danh sách Favourite.
      */
     List<Favourite> findByUserUserid(String userId);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM Favourite f WHERE f.user.userid = :userId AND f.recipe.id = :recipeId")
