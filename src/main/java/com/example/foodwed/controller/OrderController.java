@@ -84,4 +84,55 @@ public class OrderController {
                         "success", "200", "Orders retrieved successfully", response
                 ));
     }
+
+    @GetMapping("/orderDetail/{id}")
+    public ResponseEntity<?> getDetailOrder(@PathVariable String id) {
+        Orders order = orderService.getDetailOrder(id);
+
+        if (order == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiRespone<String>(
+                            "error", "404", "Order not found", null
+                    ));
+        }
+
+        // Nếu đơn hàng tồn tại, trả về chi tiết đơn hàng
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiRespone<Orders>(
+                        "success", "200", "Order retrieved successfully", order
+                ));
+    }
+
+    @GetMapping("/uorder/{uid}/Active")
+    public ResponseEntity<?> getActiveOrder(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @PathVariable String uid
+    ) {
+        PaginatedResponse<OrderResponse> response = orderService.getActiveOrder( uid, page, size);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiRespone<PaginatedResponse<OrderResponse>>(
+                        "success", "200", "Orders retrieved successfully", response
+                ));
+    }
+
+    @GetMapping("/uorder/{uid}/InActive")
+    public ResponseEntity<?> getInActiveOrder(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @PathVariable String uid
+    ) {
+        PaginatedResponse<OrderResponse> response = orderService.getInActiveOrder(uid, page, size);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiRespone<PaginatedResponse<OrderResponse>>(
+                        "success", "200", "Orders retrieved successfully", response
+                ));
+    }
+
+
+
+
+
+
+
 }

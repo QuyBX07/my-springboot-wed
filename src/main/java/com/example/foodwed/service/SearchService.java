@@ -29,7 +29,7 @@ public class SearchService {
 
         // Chuyển đổi kết quả từ RecipeCategory thành RecipeResponse
         return randomRecipeSearch.stream()
-                .map(rc -> new RecipeResponse(rc.getRecipe().getId(), rc.getRecipe().getName(), rc.getRecipe().getImage()))
+                .map(rc -> new RecipeResponse(rc.getRecipe().getId(), rc.getRecipe().getName(), rc.getRecipe().getImage(), rc.getRecipe().getServes(), rc.getRecipe().getTime()))
                 .collect(Collectors.toList());
     }
 }

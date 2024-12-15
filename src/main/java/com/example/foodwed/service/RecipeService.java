@@ -44,7 +44,9 @@ public class RecipeService {
                 .map(recipe -> new RecipeResponse(
                         recipe.getId(),
                         recipe.getName(),
-                        recipe.getImage()
+                        recipe.getImage(),
+                        recipe.getServes(),
+                        recipe.getTime()
                 ))
                 .toList();
 
