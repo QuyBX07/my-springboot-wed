@@ -26,6 +26,11 @@ public class FavouriteController {
         Favourite favourite = favouriteService.addRecipeToFavourites(recipeId, userId);
         return ResponseEntity.ok(favourite);
     }
+    @PostMapping("/isExits")
+    public ResponseEntity<?> isExit(@RequestParam String recipeId, @RequestParam String userId) {
+        Boolean isExit = favouriteService.isExits(recipeId, userId);
+        return ResponseEntity.ok(isExit);
+    }
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteFavourite(@RequestParam String userId, @RequestParam String recipeId) {
         // Gọi phương thức xóa trong service
