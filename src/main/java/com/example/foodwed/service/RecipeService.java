@@ -6,13 +6,11 @@ import com.example.foodwed.dto.response.PaginatedResponse;
 import com.example.foodwed.dto.response.RecipeDetailResponse;
 import com.example.foodwed.dto.response.RecipeEditlResponse;
 import com.example.foodwed.dto.response.RecipeResponse;
-import com.example.foodwed.entity.Category;
-import com.example.foodwed.entity.Recipe;
-import com.example.foodwed.entity.RecipeCategoryId;
-import com.example.foodwed.entity.Recipe_Category;
+import com.example.foodwed.entity.*;
 import com.example.foodwed.exception.Appexception;
 import com.example.foodwed.exception.ErrorCode;
 import com.example.foodwed.repository.CategoryReponsitory;
+import com.example.foodwed.repository.FavouriteReponsitory;
 import com.example.foodwed.repository.RecipeCategoryRepository;
 import com.example.foodwed.repository.RecipeReponsitory;
 
@@ -34,6 +32,8 @@ public class RecipeService {
     private CategoryReponsitory categoryReponsitory;
     @Autowired
     private RecipeCategoryRepository recipeCategoryRepository;
+    @Autowired
+    private FavouriteReponsitory favouriteReponsitory;
 
     public PaginatedResponse<RecipeResponse> getAllRecipe(int page, int size) {
         PageRequest pageable = PageRequest.of(page, size);
@@ -98,7 +98,14 @@ public class RecipeService {
 
     @Transactional
     public void delete(String recipeId) {
-        // Kiểm tra xem Recipe có tồn tại không
+        List<Favourite> favourites = favouriteReponsitory.findByRecipeId(recipeId);
+
+        if (favourites != null && !favourites.isEmpty()) {
+            for (Favourite favourite : favourites) {
+                // Xóa từng yêu thích từ cơ sở dữ liệu
+                favouriteReponsitory.delete(favourite);
+            }
+        }
         if (!recipeReponsitory.existsById(recipeId)) {
             throw new Appexception(ErrorCode.RECIPE_NOT_FOUND);
         }
