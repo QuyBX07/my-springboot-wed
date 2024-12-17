@@ -7,6 +7,7 @@ import com.example.foodwed.dto.response.ApiRespone;
 import com.example.foodwed.dto.response.AuthResponse;
 import com.example.foodwed.dto.response.IntrospectResponse;
 import com.example.foodwed.entity.User;
+import com.example.foodwed.exception.Appexception;
 import com.example.foodwed.repository.UserReponsitory;
 import com.example.foodwed.service.AuthService;
 import com.example.foodwed.service.GmailService;
@@ -16,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +25,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -105,4 +109,39 @@ public class AuthController {
         // Tạo mật khẩu ngẫu nhiên dài 8 ký tự
         return UUID.randomUUID().toString().substring(0, 8);
     }
+
+
+    @PostMapping("/refresh")
+    public ResponseEntity<Map<String, Object>> refreshToken(@RequestHeader("Authorization") String authorizationHeader) {
+        try {
+            String token = authorizationHeader.substring(7); // Loại bỏ chữ "Bearer "
+
+            // Gọi phương thức refreshToken trong AuthService
+            AuthResponse authResponse = authService.refreshToken(token);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "success");
+            response.put("message", "Token refreshed successfully");
+            response.put("result", authResponse);
+
+            return ResponseEntity.ok(response);
+        } catch (Appexception e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "error");
+            errorResponse.put("message", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+        } catch (Exception e) {
+            log.error("Error refreshing token", e);
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "error");
+            errorResponse.put("message", "Internal server error");
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+
+
+
 }

@@ -107,4 +107,40 @@ public class AuthService {
 
         return stringJoiner.toString();
     }
+
+    public AuthResponse refreshToken(String token) {
+        try {
+            // Parse refresh token
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+            if (!signedJWT.verify(verifier)) {
+                throw new Appexception(ErrorCode.INVALID_TOKEN);
+            }
+
+            // Kiểm tra nếu token chưa hết hạn
+            Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+            if (!expirationTime.after(new Date())) {
+                throw new Appexception(ErrorCode.TOKEN_EXPIRED);
+            }
+
+            // Lấy userid từ claims
+            String userId = signedJWT.getJWTClaimsSet().getStringClaim("userid");
+
+            // Tìm user từ userid
+            User user = userReponsitory.findById(userId).orElseThrow(() -> new Appexception(ErrorCode.USERNOTFOUND));
+
+            // Tạo mới token
+            String newToken = generateToken(user);
+
+            return AuthResponse.builder()
+                    .token(newToken)
+                    .authenticated(true)
+                    .build();
+        } catch (Exception e) {
+            log.error("Error refreshing token", e);
+            throw new Appexception(ErrorCode.INTERNAL_ERROR);
+        }
+    }
+
+
 }
