@@ -21,6 +21,7 @@ public interface FavouriteReponsitory extends JpaRepository<Favourite, Favourite
      * @return Danh sách Favourite.
      */
     List<Favourite> findByUserUserid(String userId);
+    List<Favourite> findByRecipeId(String recipeId);
 
     @Modifying
     @Transactional

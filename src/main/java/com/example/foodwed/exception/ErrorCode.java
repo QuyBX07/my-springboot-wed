@@ -13,7 +13,11 @@ public enum ErrorCode {
     RECIPE_NOT_FOUND("fail",1009,"recipe not found"),
     USERNOTFOUND("fail",1010,"Người dùng không tồn tại"),
     INVALIDPASSWORD("fail",1011,"Mật khẩu cũ không đúng"),
-    ORDER_NOT_FOUND("fail", 1012,"Không tìm thấy order")
+    ORDER_NOT_FOUND("fail", 1012,"Không tìm thấy order"),
+    INVALID_TOKEN("fail", 1013,"Không tìm thấy token"),
+    TOKEN_EXPIRED("fail", 1014,"Token hết hạn"),
+    INTERNAL_ERROR("fail", 1012,"Lỗi làm tươi token"),
+    UNAUTHORIZED("fail", 1013,"Token chưa hết hạn, không thể làm tươi")
 
     ;
     ErrorCode(String status,int code, String message) {
