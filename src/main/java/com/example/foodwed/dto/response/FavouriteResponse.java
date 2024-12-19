@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
         private String recipeId;
         private String recipeName;
         private String recipeImage;
+        private int serves;
+        private int time;
 
 
     }

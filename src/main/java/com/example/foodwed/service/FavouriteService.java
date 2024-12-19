@@ -77,7 +77,10 @@ public class FavouriteService {
                 .map(favourite -> new FavouriteResponse(
                         favourite.getRecipe().getId(),
                         favourite.getRecipe().getName(),
-                        favourite.getRecipe().getImage()
+                        favourite.getRecipe().getImage(),
+                        favourite.getRecipe().getServes(),
+                        favourite.getRecipe().getTime()
+
                 ))
                 .collect(Collectors.toList());
     }
